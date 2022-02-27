@@ -36,7 +36,7 @@ class ParticleSystem {
     let i = 0;
     while (i < this.particleCount) {
       // this.particlesGeom.attributes.position.array[i * 3 + 0] += 0.01
-      this.particlesGeom.attributes.position.array[i * 3 + 1] += 0.01;
+      this.particlesGeom.attributes.position.array[i * 3 + 1] += 0.03;
       // this.particlesGeom.attributes.position.array[i * 3 + 2] += 0.01
 
       if (this.particlesGeom.attributes.position.array[i * 3 + 1] > this.boxSize / 2) {

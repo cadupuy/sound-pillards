@@ -45,6 +45,7 @@ class SpherePillardsClass {
     });
 
     const sphereFolder = myGui.addFolder("Sphere Pillards");
+    sphereFolder.open();
     sphereFolder.add(this.params, "waveSpeed", 0.1, 3).name("Wave Speed");
     sphereFolder
       .add(this.params, "subDiv", 1, 5)

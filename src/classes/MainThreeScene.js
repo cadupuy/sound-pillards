@@ -10,9 +10,10 @@ import SpherePillards from "./SpherePillardsClass";
 import Particles from "./ParticlesClass";
 import Floor from "./FloorClass";
 import Parallax from "./ParallaxClass";
+import Spectrum from "./SpectrumClass";
 
-import simpleFrag from "../shaders/simple.frag";
-import simpleVert from "../shaders/simple.vert";
+import spectrumFrag from "../shaders/spectrum.frag";
+import spectrumVert from "../shaders/spectrum.vert";
 
 class MainThreeScene {
   constructor() {
@@ -32,7 +33,7 @@ class MainThreeScene {
     container.appendChild(this.renderer.domElement);
 
     const color = new THREE.Color(0x151515);
-    const fog = new THREE.Fog(color, 15, 30);
+    const fog = new THREE.Fog(color, 5, 20);
 
     //MAIN SCENE INSTANCE
     this.scene = new THREE.Scene();
@@ -40,7 +41,7 @@ class MainThreeScene {
     this.scene.fog = fog;
     //CAMERA AND ORBIT CONTROLLER
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.camera.position.set(0, 0, 9);
+    this.camera.position.set(0, 0, 8);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enabled = config.controls;
     this.controls.maxDistance = 20;
@@ -50,19 +51,21 @@ class MainThreeScene {
 
     //DUMMY CUBE + SIMPLE GLSL SHADER LINKAGE
     const shaderMat = new THREE.ShaderMaterial({
-      vertexShader: simpleVert,
-      fragmentShader: simpleFrag,
+      vertexShader: spectrumFrag,
+      fragmentShader: spectrumVert,
     });
 
     SpherePillards.init(this.scene);
     Floor.init(this.scene);
     Particles.init(this.scene);
+    Spectrum.init(this.scene);
     Parallax.init(this.camera);
 
     MyGUI.hide();
     if (config.myGui) MyGUI.show();
 
     const camFolder = MyGUI.addFolder("Camera Folder");
+    camFolder.open();
     camFolder
       .add(this.controls, "enabled")
       .onChange(() => {
@@ -88,10 +91,11 @@ class MainThreeScene {
 
   update() {
     this.renderer.render(this.scene, this.camera);
-    this.scene.rotateY(0.0015);
+    this.scene.rotateY(0.002);
     SpherePillards.update();
     Particles.update();
     Parallax.update();
+    Spectrum.update();
   }
 
   resizeCanvas() {

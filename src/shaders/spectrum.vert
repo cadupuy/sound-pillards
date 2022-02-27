@@ -1,7 +1,12 @@
+
+#pragma glslify: snoise3 = require(glsl-noise/simplex/3d)
+
 varying vec2 vUv; 
 varying vec3 vNormal;
 varying vec3 vPosition;
 varying vec2 vMatCapUV;
+
+uniform float uTime;
 
 void main() {
     vUv = uv; 
@@ -22,6 +27,14 @@ void main() {
     vMatCapUV = r.xy / m + .5;
 
 
-    vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+    float pN = snoise3(vec3(position.xz*2.,position.y-uTime*0.05));
+    float displaceIntensity = position.y*0.4-0.5;
+    if(displaceIntensity <= 0.) displaceIntensity = 0.;
+    float displace = pN*displaceIntensity +1.;
+
+    vec3 pos = position;
+    pos.xz*=displace;
+
+    vec4 modelViewPosition = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * modelViewPosition; 
 }
